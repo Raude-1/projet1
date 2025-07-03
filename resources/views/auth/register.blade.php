@@ -1,61 +1,53 @@
-<x-guest-layout>
-    <form method="POST" action="{{ route('register') }}">
-        @csrf
+@extends('layouts.app') {{-- ou guest.blade.php selon ton projet --}}
 
-        <!-- Name -->
-        <div>
-            <x-input-label for="name" :value="__('Name')" />
-            <x-text-input id="name" class="block mt-1 w-full" type="text" name="name" :value="old('name')" required autofocus autocomplete="name" />
-            <x-input-error :messages="$errors->get('name')" class="mt-2" />
-        </div>
+@section('content')
+<div style="min-height: 100vh; display: flex; justify-content: center; align-items: center; background: linear-gradient(to right, #0f766e, #0ea5e9); padding: 20px;">
+    <div style="max-width: 500px; width: 100%; background: white; padding: 30px; border-radius: 12px; box-shadow: 0 10px 20px rgba(0,0,0,0.15);">
+        <h2 style="text-align: center; color: #0f766e; font-size: 1.8rem; margin-bottom: 20px;">Créer un compte</h2>
 
-        <!-- Email Address -->
-        <div class="mt-4">
-            <x-input-label for="email" :value="__('Email')" />
-            <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autocomplete="username" />
-            <x-input-error :messages="$errors->get('email')" class="mt-2" />
-        </div>
+        @if ($errors->any())
+            <div style="background: #fee2e2; color: #991b1b; padding: 10px 15px; border-radius: 8px; margin-bottom: 20px;">
+                <ul style="margin: 0; padding-left: 20px;">
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
 
-        <!-- Password -->
-        <div class="mt-4">
-            <x-input-label for="password" :value="__('Password')" />
+        <form action="{{ route('register') }}" method="POST" style="display: flex; flex-direction: column; gap: 15px;">
+            @csrf
 
-            <x-text-input id="password" class="block mt-1 w-full"
-                            type="password"
-                            name="password"
-                            required autocomplete="new-password" />
+            <input type="text" name="name" value="{{ old('name') }}" placeholder="Nom complet" required
+                style="padding: 12px; border-radius: 8px; border: 1px solid #ccc;" />
 
-            <x-input-error :messages="$errors->get('password')" class="mt-2" />
-        </div>
+            <input type="email" name="email" value="{{ old('email') }}" placeholder="Adresse email" required
+                style="padding: 12px; border-radius: 8px; border: 1px solid #ccc;" />
 
-        <!-- Confirm Password -->
-        <div class="mt-4">
-            <x-input-label for="password_confirmation" :value="__('Confirm Password')" />
+            <input type="password" name="password" placeholder="Mot de passe" required
+                style="padding: 12px; border-radius: 8px; border: 1px solid #ccc;" />
 
-            <x-text-input id="password_confirmation" class="block mt-1 w-full"
-                            type="password"
-                            name="password_confirmation" required autocomplete="new-password" />
+            <input type="password" name="password_confirmation" placeholder="Confirmer le mot de passe" required
+                style="padding: 12px; border-radius: 8px; border: 1px solid #ccc;" />
 
-            <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
-        </div>
-
-        <div class="mt-4">
-            <label for="role">Rôle</label>
-            <select name="role" required class="form-control">
+            <select name="role" required style="padding: 12px; border-radius: 8px; border: 1px solid #ccc;">
+                <option value="">-- Sélectionnez un rôle --</option>
                 <option value="etudiant">Étudiant</option>
                 <option value="formateur">Formateur</option>
-                <option value="parent">Parent</option>    
+                <option value="parent">Parent</option>
+                <option value="admin">Admin</option>
             </select>
-        </div>
 
-        <div class="flex items-center justify-end mt-4">
-            <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" href="{{ route('login') }}">
-                {{ __('Already registered?') }}
-            </a>
+            <button type="submit"
+                style="padding: 12px; background-color: #0f766e; color: white; font-weight: bold; border: none; border-radius: 8px; cursor: pointer;">
+                S'inscrire
+            </button>
+        </form>
 
-            <x-primary-button class="ms-4">
-                {{ __('Register') }}
-            </x-primary-button>
-        </div>
-    </form>
-</x-guest-layout>
+        <p style="text-align: center; margin-top: 16px;">
+            Déjà inscrit ?
+            <a href="{{ route('login') }}" style="color: #0ea5e9;">Connectez-vous</a>
+        </p>
+    </div>
+</div>
+@endsection
